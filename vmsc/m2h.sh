@@ -5,10 +5,11 @@
 # | |/ / / /  / /_/ /_/ / /_/ / / /_/ / /_/ />  <   / /  / / /_/ / /_/ / / / / /_/  __/ /    
 # |___/_/_/   \__/\__,_/\__,_/_/_____/\____/_/|_|  /_/  /_/\____/\__,_/_/ /_/\__/\___/_/     
 #
-# VirtualBox自動起動及び自動sshfsマウントスクリプト
+# VirtualBox自動起動及び自動ssh接続スクリプト
 # 2015.7.29 
+# 2015.12.28 -- sshfsの使用を取りやめてsshでの接続とした 
 
-. ~/vmsrc.sh
+# . ~/pecosh/vmsc/vmsrc.sh
 
 white_green="\e[37;42;1m"
 white_red="\e[37;41;1m"
@@ -37,8 +38,6 @@ if [ $isRunning -eq 0 ]; then
     exit 1
 fi
 
-
-
 #VM起動
 VBoxManage startvm "$1" --type headless > /dev/null 2>&1
 /bin/echo -e "${white_green}VM起動${colorEnd}"
@@ -50,12 +49,14 @@ for e in 0 5 10 15 20 25 30 35 40 45 50 55 60; do
     sleep 5s
 done
 
-#sshfsマウント処理
+#ssh接続
+vmname="ssh -M -p22 -i ~/.ssh/centos66rsa vagrant@centos66"
+# vmname="ssh -p22 vagrant@centos66"
 count=0
-/bin/echo -e "${white_green}マウント確認中${colorEnd}"
-until eval '$'${vmname}
+/bin/echo -e "${white_green}ssh接続中…${colorEnd}"
+until eval ${vmname}
 do
-    echo -n "…"
+    echo -n "$?…"
     sleep 5s	
     count=$((count+1))
     if [ $count -gt 20 ]; then
@@ -63,4 +64,5 @@ do
 	exit 255
     fi    
 done 
+
 exit 0

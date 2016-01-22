@@ -5,9 +5,10 @@
 #| |/ / / /  / /_/ /_/ / /_/ / / /_/ / /_/ />  <   / /_/ / / / / /  / / /_/ / /_/ / / / / /_/  __/ /    
 #|___/_/_/   \__/\__,_/\__,_/_/_____/\____/_/|_|   \____/_/ /_/_/  /_/\____/\__,_/_/ /_/\__/\___/_/     
 #
-# sshfsアンマウント及びVMのシャットダウンスクリプト
+# VMのシャットダウンスクリプト
 #
 # 2015.7.29
+# 2015.12.28 -- sshfsの使用中止
 
 white_green="\e[37;42;1m"
 white_red="\e[37;41;1m"
@@ -26,12 +27,12 @@ if [ $isRunning -ne 0 ]; then
     exit 1
 fi
 
-fusermount -u -z /home/pecodrive/Documents/project/mounter/ > /dev/null 2>&1;isunmount=$?
-if [ $isunmount -ne 0 ]; then
-    /bin/echo -e "${white_red}アンマウント失敗${colorEnd}"
-elif [ $isunmount -eq 0 ]; then
-    /bin/echo -e "${white_green}アンマウント成功${colorEnd}"
-fi
+# fusermount -u -z /home/pecodrive/Documents/project/mounter/ > /dev/null 2>&1;isunmount=$?
+# if [ $isunmount -ne 0 ]; then
+#     /bin/echo -e "${white_red}アンマウント失敗${colorEnd}"
+# elif [ $isunmount -eq 0 ]; then
+#     /bin/echo -e "${white_green}アンマウント成功${colorEnd}"
+# fi
 
 VBoxManage controlvm $1 poweroff >/dev/null 2>&1
 /bin/echo -e "${white_green}VMをシャットダウンしました${colorEnd}"
